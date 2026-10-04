@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>La Taupinière</title>
-<meta name="description" content="Maths et physique de PCSI : cours complets, démonstrations, cartes de révision, quiz, exercices corrigés et jeux.">
+<meta name="description" content="Maths, physique et chimie de PCSI : cours complets, démonstrations, cartes de révision, quiz, exercices corrigés et jeux.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Caveat:wght@600;700&family=Source+Serif+4:opsz,wght@8..60,400..600&display=swap">
@@ -11,14 +11,14 @@
 :root{
   --paper:#f5f3ef; --grid:rgba(60,60,90,.07); --surface:#ffffff; --line:#e0dcd4;
   --ink:#1d1d27; --ink-2:#555563; --ink-3:#7c7c89;
-  --blue:#2146c7; --blue-soft:#e6ecfd; --copper:#b93c0b; --copper-soft:#fdeadb;
+  --blue:#2146c7; --blue-soft:#e6ecfd; --copper:#b93c0b; --copper-soft:#fdeadb; --violet:#6d28d9; --violet-soft:#efe7fd;
   --shadow:0 1px 2px rgba(20,20,40,.06),0 10px 30px rgba(20,20,40,.08);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#13151c; --grid:rgba(230,230,255,.04); --surface:#1b1e28; --line:#2e3242;
     --ink:#eceef5; --ink-2:#b4b8c8; --ink-3:#8a8ea0;
-    --blue:#93b6ff; --blue-soft:#1d2c4d; --copper:#ff9f5f; --copper-soft:#3a2518;
+    --blue:#93b6ff; --blue-soft:#1d2c4d; --copper:#ff9f5f; --copper-soft:#3a2518; --violet:#c4a5ff; --violet-soft:#2e2446;
     --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.3);
   }
 }
@@ -31,26 +31,27 @@ main{flex:1; width:100%; max-width:960px; margin:0 auto; padding:clamp(40px,9vh,
 h1{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-weight:800; font-size:clamp(40px,7vw,68px); line-height:1.02; letter-spacing:-.03em; margin:10px 0 14px}
 h1 .hand{font-family:Caveat,cursive; font-weight:700; font-size:.55em; letter-spacing:0; color:var(--ink-2); display:inline-block; transform:rotate(-3deg); margin-left:.2em}
 .lead{max-width:36em; color:var(--ink-2); margin:0 0 36px; font-size:clamp(17px,2.2vw,19px)}
-.cards{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px}
+.cards{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px}
 .card{--c:var(--blue); --cs:var(--blue-soft); position:relative; display:flex; flex-direction:column; gap:12px; padding:26px 24px 24px; border-radius:18px; background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow); text-decoration:none; color:inherit; overflow:hidden; transition:transform .15s, border-color .15s}
 .card.phys{--c:var(--copper); --cs:var(--copper-soft)}
+.card.chim{--c:var(--violet); --cs:var(--violet-soft)}
 .card::before{content:""; position:absolute; inset:0 0 auto 0; height:6px; background:var(--c)}
 .card:hover{transform:translateY(-3px); border-color:var(--c)}
 .card:focus-visible{outline:3px solid var(--c); outline-offset:3px}
 .card svg{width:56px; height:56px}
-.card h2{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:30px; font-weight:800; letter-spacing:-.02em; margin:0}
+.card h2{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:28px; font-weight:800; letter-spacing:-.02em; margin:0}
 .card p{margin:0; color:var(--ink-2)}
 .card .go{margin-top:auto; align-self:flex-start; font-family:"Bricolage Grotesque",system-ui,sans-serif; font-weight:700; font-size:15px; color:var(--c); background:var(--cs); padding:8px 14px; border-radius:10px}
 .note{margin:28px 0 0; font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:15px; color:var(--ink-2); display:flex; gap:10px; align-items:flex-start}
 .note svg{width:20px; height:20px; flex:none; margin-top:2px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
 footer{text-align:center; padding:20px 16px 28px; font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:13px; color:var(--ink-3)}
-@media (max-width:640px){ .cards{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:860px){ .cards{grid-template-columns:minmax(0,1fr); max-width:560px} }
 </style>
 <body>
 <main>
   <div class="eyebrow">PCSI · programme officiel 2021</div>
   <h1>La Taupinière <span class="hand">prépa sans galère</span></h1>
-  <p class="lead">Tout le cours de maths et de physique de PCSI, avec les démonstrations pas à pas, des cartes de révision qui reviennent au bon moment, des quiz, des exercices corrigés et des jeux.</p>
+  <p class="lead">Tout le cours de maths, de physique et de chimie de PCSI, avec les démonstrations pas à pas, des cartes de révision qui reviennent au bon moment, des quiz, des exercices corrigés et des jeux.</p>
   <div class="cards">
     <a class="card" href="maths/">
       <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#2146c7"/><path d="M3 41c5-8 11-11.5 21-11.5S40 33 45 41v1a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z" fill="#fff" opacity=".3"/><path d="M30 9c-2.8-.9-4.8.9-5.2 3.8l-3 20c-.4 2.9-2.4 4.7-5.2 3.8" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round"/></svg>
@@ -64,8 +65,14 @@ footer{text-align:center; padding:20px 16px 28px; font-family:"Bricolage Grotesq
       <p>24 chapitres : de l’optique à la physique quantique, en passant par la mécanique, la thermodynamique et l’induction.</p>
       <span class="go">Réviser la physique →</span>
     </a>
+    <a class="card chim" href="chimie/">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#6d28d9"/><path d="M3 41c5-8 11-11.5 21-11.5S40 33 45 41v1a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z" fill="#fff" opacity=".3"/><path d="M19 8.5h10M21 8.5v11L12.8 34.6a3 3 0 0 0 2.6 4.4h17.2a3 3 0 0 0 2.6-4.4L27 19.5v-11M16 30h16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2>Chimie</h2>
+      <p>20 chapitres : de la cinétique à la stratégie de synthèse, en passant par la stéréochimie, les solutions aqueuses et la spectroscopie.</p>
+      <span class="go">Réviser la chimie →</span>
+    </a>
   </div>
-  <p class="note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10a4 4 0 0 0 .6-8 6 6 0 0 0-11.4 1.6A3.3 3.3 0 0 0 7 18.5z"/></svg><span>Un seul compte gratuit pour les deux matières : ta progression est sauvegardée en ligne et te suit sur tous tes appareils. Tu peux aussi tout utiliser sans compte.</span></p>
+  <p class="note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10a4 4 0 0 0 .6-8 6 6 0 0 0-11.4 1.6A3.3 3.3 0 0 0 7 18.5z"/></svg><span>Un seul compte gratuit pour les trois matières : ta progression est sauvegardée en ligne et te suit sur tous tes appareils. Tu peux aussi tout utiliser sans compte.</span></p>
 </main>
 <footer>La Taupinière · contenu non relu par un professeur : en cas de doute, vérifie avec ton cours</footer>
 </body>
