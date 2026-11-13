@@ -742,14 +742,20 @@ input[type=email],input[type=password]{font:inherit; font-family:var(--f-display
 .td-hint-tip{font-size:13.5px; color:var(--ink-3); margin:0 0 10px}
 .td-foot{margin-top:22px; padding-top:8px; border-top:1px solid var(--line-2); font-family:var(--f-display); font-size:12px; color:var(--ink-3)}
 .td-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:8px; margin-bottom:6px}
-.td-row{display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid var(--line); border-radius:12px; background:var(--surface); text-decoration:none; color:var(--ink); font-family:var(--f-display)}
+.td-row{display:flex; align-items:center; gap:4px; padding:4px 8px 4px 14px; border:1px solid var(--line); border-radius:12px; background:var(--surface); color:var(--ink); font-family:var(--f-display)}
 .td-row:hover{border-color:var(--acc)}
+.td-main{display:flex; align-items:center; gap:10px; flex:1; min-width:0; padding:6px 0; text-decoration:none; color:inherit}
 .td-row .n{font-family:var(--f-mono); font-size:12px; color:var(--ink-3)}
 .td-row .t{flex:1; min-width:0; font-weight:650; font-size:14.5px; line-height:1.25}
 .td-row .c{font-size:12px; color:var(--ink-3); white-space:nowrap}
-.td-row svg{width:17px; height:17px; color:var(--acc); flex:none}
+.td-dl{display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:9px; color:var(--acc); flex:none}
+.td-dl:hover{background:var(--acc-soft)}
+.td-dl svg{width:18px; height:18px}
+.td-pdf{margin-top:10px}
+.td-pdf .btn svg, .ds-bar a.btn svg{width:17px; height:17px}
 .ds-list{display:grid; gap:10px; margin-top:18px}
-.ds-card{display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; padding:14px 16px; border:1px solid var(--line); border-radius:14px; background:var(--surface); box-shadow:var(--shadow); text-decoration:none; color:var(--ink)}
+.ds-card{display:flex; align-items:center; gap:6px; padding:8px 10px 8px 16px; border:1px solid var(--line); border-radius:14px; background:var(--surface); box-shadow:var(--shadow); color:var(--ink)}
+.ds-main{display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; flex:1; min-width:0; padding:6px 0; text-decoration:none; color:inherit}
 .ds-card:hover{border-color:var(--acc)}
 .ds-n{font-family:var(--f-hand); font-size:28px; font-weight:700; color:var(--acc); min-width:62px; line-height:1}
 .ds-t{display:flex; flex-direction:column; gap:2px; flex:1; min-width:180px}
@@ -867,6 +873,7 @@ const IC = {
   calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4m8-4v4"/>',
   play: '<path d="M7 4.5v15l12-7.5z"/>',
   print: '<path d="M7 8.5V3.5h10v5"/><rect x="3.5" y="8.5" width="17" height="8.5" rx="2"/><path d="M7 14h10v6.5H7z"/>',
+  download: '<path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14"/>',
   doc: '<path d="M6 3h8.5L18 6.5V21H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
   cloud: '<path d="M7 18.5h10a4 4 0 0 0 .6-8 6 6 0 0 0-11.4 1.6A3.3 3.3 0 0 0 7 18.5z"/>'
 };
@@ -1856,6 +1863,11 @@ function tabFiche(ch) {
 const SITE_LABEL = 'Maths de PCSI', SITE_URL = 'taupiniere.github.io/taupiniere/maths';
 const frn = x => String(Math.round(x * 100) / 100).replace('.', ',');
 
+/* ---------- PDF prêts à télécharger (fabriqués par outils/make_pdfs.py dans web/site/<site>/pdf/) ---------- */
+const pdfURL = p => (WEB ? '' : 'https://' + SITE_URL + '/') + 'pdf/' + p;
+const tdPdf = ch => 'td/td-' + String(CH.indexOf(ch) + 1).padStart(2, '0') + '-' + ch.id;
+const dlLink = (href, label, cls) => `<a class="${cls || 'btn'}" href="${href}" target="_blank" rel="noopener" download>${ic('download')}${label}</a>`;
+
 /* ---------- Impression : le document à imprimer est placé dans #print-root ---------- */
 function printDoc(html) {
   let r = $('#print-root');
@@ -1961,6 +1973,7 @@ function tabTD(ch) {
       <div><span class="td-ol">Contenu</span>${ck('goals', 'Objectifs')}${ck('recall', 'Rappels de méthodes')}${ck('hints', 'Indices à la fin')}</div>
     </div>
     <div class="row td-actions"><button class="btn primary" data-act="td-print" data-ch="${ch.id}">${ic('print')} Imprimer le TD</button><button class="btn" data-act="td-print-corr" data-ch="${ch.id}">${ic('print')} Imprimer le corrigé</button><span class="muted small">${plural(kept.length, 'exercice')} · environ ${plural(pages, 'page')} A4</span></div>
+    <div class="row td-actions td-pdf">${dlLink(pdfURL(tdPdf(ch) + '.pdf'), ' TD en PDF')}${dlLink(pdfURL(tdPdf(ch) + '-corrige.pdf'), ' Corrigé en PDF')}<span class="muted small">PDF prêts à imprimer : niveaux 1 à 3, lignes, place moyenne.</span></div>
     ${WEB ? '' : `<p class="small muted" style="margin:10px 0 0">Si l’impression ne se lance pas ici, ouvre le site dans ton navigateur : <b>${SITE_URL}</b></p>`}
     ${ds.length ? `<p class="small" style="margin:10px 0 0">${ic('doc')} Ce chapitre est au programme du ${ds.map(d => `<a href="#ds.${d.id}">DS blanc n° ${d.num}</a>`).join(' et du ')}.</p>` : ''}
   </div>${tdSheetHTML(ch, o, true)}`;
@@ -2002,18 +2015,18 @@ function dsSheetHTML(d, corr) {
 }
 function dsCTA() {
   const done = DS.filter(d => dsNote(d) != null).length;
-  return `<a class="mix-cta big ds-cta" href="#ds">${ic('print')}<span><b>TD à imprimer${DS.length ? ' et DS blancs' : ''}</b> Un TD par chapitre, avec la place pour rédiger sous chaque énoncé${DS.length ? ` · ${DS.length} devoirs surveillés avec barème et corrigé${done ? ` (${done} déjà corrigé${done > 1 ? 's' : ''})` : ''}` : ''}.</span>${ic('right')}</a>`;
+  return `<a class="mix-cta big ds-cta" href="#ds">${ic('print')}<span><b>TD à imprimer${DS.length ? ' et DS blancs' : ''}</b> Un TD par chapitre, à imprimer ou à télécharger en PDF, avec la place pour rédiger sous chaque énoncé${DS.length ? ` · ${DS.length} devoirs surveillés avec barème et corrigé${done ? ` (${done} déjà corrigé${done > 1 ? 's' : ''})` : ''}` : ''}.</span>${ic('right')}</a>`;
 }
 function viewDSList() {
   const card = d => {
     const n = dsNote(d), st = dsSt(d.id);
     const chip = n != null ? `<span class="chip ${n >= 12 ? 'green' : n >= 8 ? 'amber' : 'red'}">${frn(n)} / 20</span>` : st.t0 && !st.t1 ? '<span class="chip amber">En cours</span>' : '<span class="chip">À faire</span>';
-    return `<a class="ds-card" href="#ds.${d.id}"><span class="ds-n">DS ${d.num}</span><span class="ds-t"><b>${esc(d.title)}</b><small>${d.chs.map(c => CHMAP[c] ? esc(CHMAP[c].short) : '').filter(Boolean).join(' · ')}</small></span><span class="chip">${ic('clock')} ${dsDur(d.dur)}</span>${chip}</a>`;
+    return `<div class="ds-card"><a class="ds-main" href="#ds.${d.id}"><span class="ds-n">DS ${d.num}</span><span class="ds-t"><b>${esc(d.title)}</b><small>${d.chs.map(c => CHMAP[c] ? esc(CHMAP[c].short) : '').filter(Boolean).join(' · ')}</small></span><span class="chip">${ic('clock')} ${dsDur(d.dur)}</span>${chip}</a><a class="td-dl" href="${pdfURL('ds/ds-' + d.num + '-sujet.pdf')}" target="_blank" rel="noopener" download title="Télécharger le sujet en PDF" aria-label="Télécharger le sujet du DS ${d.num} en PDF">${ic('download')}</a></div>`;
   };
-  const tdRow = c => { const ok = c.exercises.filter(e => S.ex[e.id] === 'ok').length; return `<a class="td-row" href="#ch.${c.id}.td"><span class="n">${String(CH.indexOf(c) + 1).padStart(2, '0')}</span><span class="t">${esc(c.title)}</span><span class="c">${c.exercises.length} exercices${ok ? ` · ${ok} réussi${ok > 1 ? 's' : ''}` : ''}</span>${ic('print')}</a>`; };
+  const tdRow = c => { const ok = c.exercises.filter(e => S.ex[e.id] === 'ok').length; return `<div class="td-row"><a class="td-main" href="#ch.${c.id}.td"><span class="n">${String(CH.indexOf(c) + 1).padStart(2, '0')}</span><span class="t">${esc(c.title)}</span><span class="c">${c.exercises.length} exercices${ok ? ` · ${ok} réussi${ok > 1 ? 's' : ''}` : ''}</span></a><a class="td-dl" href="${pdfURL(tdPdf(c) + '.pdf')}" target="_blank" rel="noopener" download title="Télécharger le TD en PDF" aria-label="Télécharger le TD en PDF : ${esc(c.title)}">${ic('download')}</a><a class="td-dl" href="${pdfURL(tdPdf(c) + '-corrige.pdf')}" target="_blank" rel="noopener" download title="Télécharger le corrigé en PDF" aria-label="Télécharger le corrigé du TD en PDF : ${esc(c.title)}">${ic('check')}</a></div>`; };
   return `<div class="eyebrow">À imprimer, à faire au stylo</div><h1 style="font-size:clamp(28px,4vw,40px);margin:6px 0 4px">TD et DS blancs</h1>
   <div class="sec-title"><h2>TD à imprimer</h2></div>
-  <p class="muted" style="max-width:72ch;margin-top:0">Un TD par chapitre : les objectifs, ce qu’il faut connaître et les méthodes, puis les applications directes et les exercices, avec la place pour rédiger sous chaque énoncé. Tu choisis les niveaux, la place et la réglure, puis tu imprimes le TD et, à part, son corrigé.</p>
+  <p class="muted" style="max-width:72ch;margin-top:0">Un TD par chapitre : les objectifs, ce qu’il faut connaître et les méthodes, puis les applications directes et les exercices, avec la place pour rédiger sous chaque énoncé. Tu choisis les niveaux, la place et la réglure, puis tu imprimes le TD et, à part, son corrigé ; ou tu télécharges directement le PDF (flèche : le TD, coche : son corrigé).</p>
   <div class="td-list">${CH.map(tdRow).join('')}</div>
   <div class="sec-title"><h2>DS blancs</h2></div>
   ${DS.length ? `<p class="muted" style="max-width:72ch;margin-top:0">Des devoirs surveillés qui suivent la progression de l’année. Chaque sujet commence par des questions proches du cours, continue par un exercice classique et se termine par un problème : tout le monde peut avancer, et les questions ★ départagent. Imprime le sujet, compose sur copie dans le temps imparti, sans cours ni calculatrice, puis corrige-toi avec le corrigé et le barème.</p><div class="ds-list">${DS.map(card).join('')}</div>` : '<div class="empty">Les DS blancs arrivent bientôt.</div>'}`;
@@ -2047,9 +2060,9 @@ function viewDS(id, tab) {
   const st = dsSt(id), corr = tab === 'corrige';
   const chs = d.chs.map(c => CHMAP[c]).filter(Boolean);
   let body;
-  if (!corr) body = `<div class="row ds-bar no-print">${dsTimerHTML(d)}<button class="btn" data-act="ds-print" data-id="${d.id}">${ic('print')} Imprimer le sujet</button></div>${dsSheetHTML(d, false)}`;
+  if (!corr) body = `<div class="row ds-bar no-print">${dsTimerHTML(d)}<button class="btn" data-act="ds-print" data-id="${d.id}">${ic('print')} Imprimer le sujet</button>${dlLink(pdfURL('ds/ds-' + d.num + '-sujet.pdf'), ' Sujet en PDF')}</div>${dsSheetHTML(d, false)}`;
   else if (!st.seen) body = `<div class="panel ds-gate"><h3>Tu as vraiment composé ?</h3><p>Le corrigé ne sert que si tu as cherché le sujet en entier, dans le temps imparti. Lire une correction sans avoir séché sur les questions donne l’illusion d’avoir compris.</p><div class="row"><button class="btn primary" data-act="ds-open" data-id="${d.id}">${ic('eye')} J’ai composé : voir le corrigé</button><a class="btn ghost" href="#ds.${d.id}">Retour au sujet</a></div></div>`;
-  else body = `<div class="row ds-bar no-print"><button class="btn" data-act="ds-print-corr" data-id="${d.id}">${ic('print')} Imprimer le corrigé</button></div>${dsGradeHTML(d)}${dsSheetHTML(d, true)}`;
+  else body = `<div class="row ds-bar no-print"><button class="btn" data-act="ds-print-corr" data-id="${d.id}">${ic('print')} Imprimer le corrigé</button>${dlLink(pdfURL('ds/ds-' + d.num + '-corrige.pdf'), ' Corrigé en PDF')}</div>${dsGradeHTML(d)}${dsSheetHTML(d, true)}`;
   return `<a class="backlink" href="#ds">${ic('left')} TD et DS blancs</a>
   <div class="eyebrow" style="margin-top:10px">DS blanc n° ${d.num} · ${dsDur(d.dur)} · ${frn(d.total)} points</div><h1 style="font-size:clamp(26px,3.6vw,36px);margin:6px 0 4px">${esc(d.title)}</h1>
   ${d.desc ? `<p class="muted" style="max-width:72ch;margin:0">${esc(d.desc)}</p>` : ''}
